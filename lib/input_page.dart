@@ -1,3 +1,4 @@
+import 'package:bmi_test/calculaterBMI.dart';
 import 'package:bmi_test/result_page.dart';
 import 'package:bmi_test/round_icon_button.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +6,8 @@ import 'package:bmi_test/default.dart';
 import 'package:bmi_test/iconContent.dart';
 import 'package:bmi_test/reusableCard.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import 'bottom_ges.dart';
 
 enum gen {
   Male,
@@ -243,27 +246,23 @@ class _InputPageState extends State<InputPage> {
                 ],
               ),
             ),
-            GestureDetector(
-              onTap: () {
-                print("hello");
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ResultPage(),
-                    ));
-              },
-              child: Container(
-                alignment: Alignment.center,
-                child: Text(
-                  "Calculate",
-                  textAlign: TextAlign.center,
-                  style: kBTextStyle,
-                ),
-                color: kBottomContainerColor,
-                margin: EdgeInsets.only(top: 10),
-                height: kBottomContainerHeight,
-              ),
-            ),
+            ButtomGester(
+                text: "Calculate",
+                navi: () {
+                  CalculaterBmi cal =
+                      CalculaterBmi(height: height, weight: weight);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ResultPage(
+                          bmiResult: cal.calculaterBmi(),
+                          bmitext: cal.getResult(),
+                          bmiinterpretation: cal.getInterpretation(),
+                          gender:selectedGender.toString().split(".").last,
+                          age: age.toString(),
+                        ),
+                      ));
+                }),
           ],
         ),
       ),
