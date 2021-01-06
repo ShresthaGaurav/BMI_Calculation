@@ -1,12 +1,15 @@
+import 'package:bmi_test/result_page.dart';
+import 'package:bmi_test/round_icon_button.dart';
+import 'package:flutter/material.dart';
+import 'package:bmi_test/default.dart';
 import 'package:bmi_test/iconContent.dart';
 import 'package:bmi_test/reusableCard.dart';
-import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-const bottomContainerHeight = 80.0;
-const activeColor = Color(0xff1d1e33);
-const inactiveColor = Color(0xff111328);
-const bottomContainerColor = Color(0xffeb1555);
+enum gen {
+  Male,
+  Female,
+}
 
 class InputPage extends StatefulWidget {
   @override
@@ -14,120 +17,256 @@ class InputPage extends StatefulWidget {
 }
 
 class _InputPageState extends State<InputPage> {
-  Color maleCardColor = inactiveColor;
-  Color femaleCardColor = inactiveColor;
-  String gender = "";
-
-  void updatecolor(int gennder) {
-    if (gennder == 1) {
-      if (maleCardColor == inactiveColor) {
-        maleCardColor = activeColor;
-        femaleCardColor = inactiveColor;
-        gender = "male";
-      } else {
-        gender="";
-        maleCardColor = inactiveColor;
-      }
-    } else if (gennder == 2) {
-      if (femaleCardColor == inactiveColor) {
-        femaleCardColor = activeColor;
-        maleCardColor = inactiveColor;
-        gender = "female";
-      } else {
-        femaleCardColor = inactiveColor;
-        gender="";
-      }
-    } else {
-      print("error gender");
-    }
-  }
+  Color maleCardColor = kInactiveColor;
+  Color femaleCardColor = kInactiveColor;
+  gen selectedGender;
+  int height = 180;
+  int weight = 40;
+  int age = 10;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("BMI Calculation"),
-        ),
-        body: Container(
-          width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                flex: 1,
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            updatecolor(1);
-                            print(gender);
-                          });
-                        },
-                        child: ReusableCard(
-                          color: maleCardColor,
-                          cardChild: IconContent(
-                            icon: FontAwesomeIcons.mars,
-                            gender: "MALE",
-                          ),
-                        ),
+      appBar: AppBar(
+        title: Text("BMI Calculation"),
+      ),
+      body: Container(
+        width: double.infinity,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              flex: 1,
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: ReusableCard(
+                      color: selectedGender == gen.Male
+                          ? kActiveColor
+                          : kInactiveColor,
+                      cardChild: IconContent(
+                        icon: FontAwesomeIcons.mars,
+                        gender: "MALE",
                       ),
+                      onPress: () {
+                        setState(() {
+                          selectedGender = gen.Male;
+                        });
+                      },
                     ),
-                    Expanded(
-                      flex: 1,
-                      child: GestureDetector(
-                        onTap: () {
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: ReusableCard(
+                      color: selectedGender == gen.Female
+                          ? kActiveColor
+                          : kInactiveColor,
+                      cardChild: IconContent(
+                        icon: FontAwesomeIcons.venus,
+                        gender: "FEMALE",
+                      ),
+                      onPress: () {
+                        setState(() {
+                          selectedGender = gen.Female;
+                        });
+                      },
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: ReusableCard(
+                cardChild: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "HEIGHT",
+                      style: kTextStyle,
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      textBaseline: TextBaseline.alphabetic,
+                      children: [
+                        Text(
+                          '$height',
+                          style: kBTextStyle,
+                        ),
+                        Text('cm', style: kTextStyle),
+                      ],
+                    ),
+                    SliderTheme(
+                      data: SliderThemeData().copyWith(
+                        trackHeight: 2,
+                        thumbShape:
+                            RoundSliderThumbShape(enabledThumbRadius: 10.0),
+                        overlayShape:
+                            RoundSliderOverlayShape(overlayRadius: 28.0),
+                        overlayColor: kInactiveColor,
+                        thumbColor: kBottomContainerColor,
+                        activeTrackColor: Colors.white,
+                        inactiveTrackColor: Colors.white,
+                      ),
+                      child: Slider(
+                        value: height.toDouble(),
+                        max: 220.0,
+                        min: 120,
+                        onChanged: (double newvalue) {
                           setState(() {
-                            updatecolor(2);
-                            print(gender);
+                            height = newvalue.round();
                           });
                         },
-                        child: ReusableCard(
-                          color: femaleCardColor,
-                          cardChild: IconContent(
-                            icon: FontAwesomeIcons.venus,
-                            gender: "FEMALE",
-                          ),
-                        ),
                       ),
                     )
                   ],
                 ),
+                color: kActiveColor,
               ),
-              Expanded(
-                flex: 1,
-                child: ReusableCard(
-                  color: activeColor,
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: ReusableCard(
-                        color: activeColor,
+            ),
+            Expanded(
+              flex: 1,
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: ReusableCard(
+                      color: kActiveColor,
+                      cardChild: Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Weight",
+                              style: kTextStyle,
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.baseline,
+                              textBaseline: TextBaseline.alphabetic,
+                              children: [
+                                Text(
+                                  ' $weight',
+                                  style: kBTextStyle,
+                                ),
+                                Text(
+                                  ' Kg',
+                                  style: kTextStyle,
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                RoundIconButton(
+                                    iconData: FontAwesomeIcons.plusCircle,
+                                    work: () {
+                                      setState(() {
+                                        weight > 100 ? weight = 10 : weight++;
+                                      });
+                                    }),
+                                RoundIconButton(
+                                    iconData: FontAwesomeIcons.minusCircle,
+                                    work: () {
+                                      setState(() {
+                                        setState(() {
+                                          weight <= 10 ? weight = 10 : weight--;
+                                        });
+                                      });
+                                    }),
+                              ],
+                            )
+                          ],
+                        ),
                       ),
                     ),
-                    Expanded(
-                      flex: 1,
-                      child: ReusableCard(
-                        color: activeColor,
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: ReusableCard(
+                      color: kActiveColor,
+                      cardChild: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Age",
+                            style: kTextStyle,
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.baseline,
+                            textBaseline: TextBaseline.alphabetic,
+                            children: [
+                              Text(
+                                age.toString(),
+                                style: kBTextStyle,
+                              ),
+                              Text(
+                                "  Year",
+                                style: kTextStyle,
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              RoundIconButton(
+                                  iconData: FontAwesomeIcons.plusCircle,
+                                  work: () {
+                                    setState(() {
+                                      age > 100 ? age = 10 : age++;
+                                    });
+                                  }),
+                              RoundIconButton(
+                                  iconData: FontAwesomeIcons.minusCircle,
+                                  work: () {
+                                    setState(() {
+                                      setState(() {
+                                        age <= 10 ? age = 10 : age--;
+                                      });
+                                    });
+                                  }),
+                            ],
+                          )
+                        ],
                       ),
-                    )
-                  ],
-                ),
+                    ),
+                  )
+                ],
               ),
-              Container(
-                color: bottomContainerColor,
+            ),
+            GestureDetector(
+              onTap: () {
+                print("hello");
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ResultPage(),
+                    ));
+              },
+              child: Container(
+                alignment: Alignment.center,
+                child: Text(
+                  "Calculate",
+                  textAlign: TextAlign.center,
+                  style: kBTextStyle,
+                ),
+                color: kBottomContainerColor,
                 margin: EdgeInsets.only(top: 10),
-                height: bottomContainerHeight,
+                height: kBottomContainerHeight,
               ),
-            ],
-          ),
-        ));
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

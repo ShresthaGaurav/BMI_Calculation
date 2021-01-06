@@ -1,23 +1,33 @@
+import 'package:bmi_test/default.dart';
 import 'package:flutter/material.dart';
-const double height=200;
-const double width=170;
+
 class ReusableCard extends StatelessWidget {
   final Color color;
   final Widget cardChild;
+  final Function onPress;
 
-  ReusableCard({@required this.color, this.cardChild});
+  ReusableCard({ this.color,  this.cardChild,  this.onPress});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: height,
-      width: width,
-      margin: EdgeInsets.all(15),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(20),
+    return GestureDetector(
+      onTap: () {
+        try {
+          onPress();
+        } catch(error) {
+          print("No Function");
+        }
+      },
+      child: Container(
+        height: KHeight,
+        width: kWidth,
+        margin: EdgeInsets.all(15),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: cardChild,
       ),
-      child: cardChild,
     );
   }
 }

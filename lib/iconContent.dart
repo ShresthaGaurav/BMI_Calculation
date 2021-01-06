@@ -1,16 +1,14 @@
+import 'package:bmi_test/default.dart';
 import 'package:flutter/material.dart';
 
-const double icon_height = 80;
-const TextStyle textStyle = TextStyle(
-  fontSize: 18,
-  color: Color(0xff8d8e98),
-);
+
+
 
 class IconContent extends StatelessWidget {
   final String gender;
   final IconData icon;
 
-  IconContent({this.gender, @required this.icon});
+  IconContent({ this.gender,  this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -19,14 +17,14 @@ class IconContent extends StatelessWidget {
       children: [
         Icon(
           icon,
-          size: icon_height,
+          size: kIcon_height,
         ),
         SizedBox(
           height: 15,
         ),
         Text(
           gender,
-          style: textStyle,
+          style: kTextStyle,
         )
       ],
     );
